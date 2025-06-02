@@ -67,6 +67,27 @@ English | [简体中文](README_zh-CN.md)
 </div>
 
 ## Introduction
+```
+git clone https://github.com/open-mmlab/mmdetection.git mmdetection3.3
+cd mmdetection3.3
+```
+
+```
+conda create --name lcs_mmdetection3.3 python=3.8
+conda activate lcs_mmdetection3.3
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
+pip install -U openmim
+mim install mmcv==2.1.0
+pip install -v -e .
+```
+
+```
+mim download mmdet --config rtmdet_tiny_8xb32-300e_coco --dest .
+python demo/image_demo.py demo/demo.jpg rtmdet_tiny_8xb32-300e_coco.py --weights rtmdet_tiny_8xb32-300e_coco_20220902_112414-78e30dcc.pth --device cuda:0
+```
+
+
+
 
 MMDetection is an open source object detection toolbox based on PyTorch. It is
 a part of the [OpenMMLab](https://openmmlab.com/) project.
