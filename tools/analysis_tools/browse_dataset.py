@@ -58,6 +58,7 @@ def main():
         data_sample = item['data_samples'].numpy()
         gt_instances = data_sample.gt_instances
         img_path = osp.basename(item['data_samples'].img_path)
+        print('bboxes:', gt_instances.get('bboxes', None))
 
         out_file = osp.join(
             args.output_dir,
