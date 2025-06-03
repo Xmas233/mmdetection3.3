@@ -2,6 +2,7 @@ _base_ = '../configs/yolox/yolox_l_8xb8-300e_coco.py'
 '''
 python tools/train.py MyModel/yolox_l_8xb8-300e_WAID.py
 python tools/analysis_tools/browse_dataset.py MyModel/yolox_l_8xb8-300e_WAID.py
+python tools/analysis_tools/analyze_logs.py plot_curve work_dirs/yolox_l_8xb8-300e_WAID/20250603_135659/vis_data/20250603_135659.json --keys loss --legend Loss
 '''
 
 # model settings
@@ -19,7 +20,8 @@ model = dict(
 max_epochs = 50
 num_last_epochs = 15
 interval = 5
-
+base_lr = 0.01
+batch_size = 4
 
 # dataset settings
 data_root = 'data/COCO_WAID/'
@@ -62,7 +64,7 @@ img_scale = (640, 640)
 
 train_dataloader = dict(
     _delete_=True,
-    batch_size=2,
+    batch_size=batch_size,
     num_workers=2,
     dataset=dict(
         type=dataset_type,
@@ -80,7 +82,7 @@ train_dataloader = dict(
 )
 val_dataloader = dict(
     _delete_=True,
-    batch_size=2,
+    batch_size=batch_size,
     num_workers=2,
     dataset=dict(
         type=dataset_type,
@@ -91,6 +93,11 @@ val_dataloader = dict(
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(type='LoadAnnotations', with_bbox=True),
+            dict(
+                type='Resize',
+                scale=img_scale,
+                keep_ratio=True
+            ),
             dict(
                 type='PackDetInputs',
                 meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
