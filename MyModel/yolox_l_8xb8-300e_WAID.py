@@ -1,5 +1,6 @@
 _base_ = '../configs/yolox/yolox_l_8xb8-300e_coco.py'
 '''
+set CUDA_LAUNCH_BLOCKING=1
 python tools/train.py MyModel/yolox_l_8xb8-300e_WAID.py
 python tools/analysis_tools/browse_dataset.py MyModel/yolox_l_8xb8-300e_WAID.py
 python tools/analysis_tools/analyze_logs.py plot_curve work_dirs/yolox_l_8xb8-300e_WAID/20250603_135659/vis_data/20250603_135659.json --keys loss --legend Loss
@@ -17,11 +18,14 @@ model = dict(
         feat_channels=256,
 ))
 # training settings
-max_epochs = 50
+max_epochs = 300
 num_last_epochs = 15
 interval = 5
+train_cfg = dict(max_epochs=max_epochs, val_interval=interval)
+
 base_lr = 0.01
 batch_size = 4
+
 
 # dataset settings
 data_root = 'data/COCO_WAID/'
