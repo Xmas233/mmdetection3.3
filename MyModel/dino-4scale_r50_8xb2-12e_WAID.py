@@ -22,7 +22,7 @@ metainfo = {
 }
 
 # 重写image_scale
-img_scale = (640, 640)
+img_scale = (512, 512)
 
 # train和test的pipeline不知道是覆盖还是新增
 # train_pipeline=[
@@ -52,13 +52,14 @@ img_scale = (640, 640)
 
 train_dataloader = dict(
     _delete_=True,
-    batch_size=2,
-    num_workers=2,
+    batch_size=4,
+    num_workers=1,
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='annotations/train_coco.json',
         data_prefix=dict(img='train/'),
+        metainfo=metainfo,
         pipeline=[
             dict(type='LoadImageFromFile', backend_args=None),
             dict(type='LoadAnnotations', with_bbox=True, with_mask=False, poly2mask=False),
@@ -69,13 +70,14 @@ train_dataloader = dict(
 )
 val_dataloader = dict(
     _delete_=True,
-    batch_size=2,
-    num_workers=2,
+    batch_size=1,
+    num_workers=1,
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='annotations/valid_coco.json',
         data_prefix=dict(img='valid/'),
+        metainfo=metainfo,
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(type='LoadAnnotations', with_bbox=True),

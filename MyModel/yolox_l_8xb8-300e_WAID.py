@@ -1,10 +1,15 @@
 _base_ = '../configs/yolox/yolox_l_8xb8-300e_coco.py'
+CUDA_LAUNCH_BLOCKING=1
 '''
 set CUDA_LAUNCH_BLOCKING=1
 python tools/train.py MyModel/yolox_l_8xb8-300e_WAID.py
 python tools/analysis_tools/browse_dataset.py MyModel/yolox_l_8xb8-300e_WAID.py
-python tools/analysis_tools/analyze_logs.py plot_curve work_dirs/yolox_l_8xb8-300e_WAID/20250603_135659/vis_data/20250603_135659.json --keys loss --legend Loss
+python tools/analysis_tools/analyze_logs.py plot_curve work_dirs/yolox_l_8xb8-300e_WAID/20250606_182252/vis_data/20250606_182252.json --keys loss --legend Loss
+python tools/test.py MyModel/yolox_l_8xb8-300e_WAID.py work_dirs/yolox_l_8xb8-300e_WAID/epoch_100.pth --out yolox.pkl
+python tools/analysis_tools/analyze_results.py MyModel/yolox_l_8xb8-300e_WAID.py yolox.pkl work_dirs/yolox_l_8xb8-300e_WAID/vis --show-score-thr 0.3 
 '''
+# 使用moco的预训练权重
+load_from = 'checkpoints/yolox_l_8x8_300e_coco_20211126_140236-d3bd2b23.pth'
 
 # model settings
 # TODO: change the backbone, neck, and bbox_head settings as needed
@@ -18,12 +23,12 @@ model = dict(
         feat_channels=256,
 ))
 # training settings
-max_epochs = 300
-num_last_epochs = 15
+max_epochs = 50
+num_last_epochs = 10
 interval = 5
 train_cfg = dict(max_epochs=max_epochs, val_interval=interval)
 
-base_lr = 0.01
+base_lr = 0.0001
 batch_size = 4
 
 
